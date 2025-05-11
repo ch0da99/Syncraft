@@ -117,6 +117,12 @@ export default function App() {
     }
   };
 
+  const handleDeleteTask = (taskId: string) => {
+    setTasks((prev) => prev.filter((task) => task.id !== taskId));
+    setShowEditModal(false);
+    setEditTask(null);
+  };
+
   const updatePhaseDecisionInModal = (
     phaseId: string,
     decision: "approved" | "revised" | "denied"
@@ -158,11 +164,11 @@ export default function App() {
               Last edited: {formatDate(task.lastEdited)}
             </p>
             {task.decision === "started" ? (
-              <div className="flex space-x-3 mt-4">
+              <div className="flex flex-wrap gap-2 mt-4 max-w-full">
                 {statuses.map((status) => (
                   <div key={status.id} className="relative">
                     <div
-                      className={`w-12 h-12 rounded-full flex items-center justify-center text-xl ${getStatusColor(
+                      className={`w-10 h-10 rounded-full flex items-center justify-center text-xl ${getStatusColor(
                         task.phaseDecisions[status.id]
                       )}`}
                     >
@@ -184,7 +190,7 @@ export default function App() {
 
       {showEditModal && editTask && (
         <div className="fixed inset-0 backdrop-blur-sm flex justify-center items-center z-50">
-          <div className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-md">
+          <div className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-md max-h-screen overflow-y-auto">
             <h2 className="text-xl font-bold mb-4">Edit Task</h2>
             <input
               className="w-full mb-3 p-2 rounded bg-gray-700 text-white"
@@ -270,6 +276,12 @@ export default function App() {
                 </button>
               )}
               <button
+                className="px-4 py-2 rounded bg-red-600 hover:bg-red-500"
+                onClick={() => handleDeleteTask(editTask.id)}
+              >
+                Delete
+              </button>
+              <button
                 className="px-4 py-2 rounded bg-blue-600 hover:bg-blue-500"
                 onClick={handleSaveEditTask}
               >
@@ -288,7 +300,7 @@ export default function App() {
 
       {showCreateModal && (
         <div className="fixed inset-0 backdrop-blur-sm flex justify-center items-center z-50">
-          <div className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-md">
+          <div className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-md max-h-screen overflow-y-auto">
             <h2 className="text-xl font-bold mb-4">Create New Task</h2>
             <input
               className="w-full mb-3 p-2 rounded bg-gray-700 text-white"
