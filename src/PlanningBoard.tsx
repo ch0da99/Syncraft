@@ -71,7 +71,114 @@ const users: Record<string, string[]> = {
 };
 
 export default function App() {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([
+    {
+      id: "task1",
+      title: "Write Script for Episode 1",
+      description: "Draft and finalize the script for the first episode.",
+      roleAssignments: {
+        scriptwriting: "Alice",
+        voiceover: "Dave",
+        fileOrganization: "Grace",
+        videoEdit: "Judy",
+        thumbnail: "Mallory",
+      },
+      lastEdited: new Date().toISOString(),
+      decision: "started",
+      phaseDecisions: {
+        scriptwriting: "approved",
+        voiceover: "revised",
+        fileOrganization: "denied",
+        videoEdit: "",
+        thumbnail: "",
+      },
+    },
+    {
+      id: "task2",
+      title: "Thumbnail for Season Opener",
+      description: "Design an engaging thumbnail for the opening episode.",
+      roleAssignments: {
+        scriptwriting: "Bob",
+        voiceover: "Eve",
+        fileOrganization: "Heidi",
+        videoEdit: "Karl",
+        thumbnail: "Olivia",
+      },
+      lastEdited: new Date().toISOString(),
+      decision: "draft",
+      phaseDecisions: {
+        scriptwriting: "",
+        voiceover: "",
+        fileOrganization: "",
+        videoEdit: "",
+        thumbnail: "",
+      },
+    },
+    {
+      id: "task3",
+      title: "Organize Project Files",
+      description: "Sort and name all assets for Episode 2 correctly.",
+      roleAssignments: {
+        scriptwriting: "Charlie",
+        voiceover: "Frank",
+        fileOrganization: "Ivan",
+        videoEdit: "Liam",
+        thumbnail: "Niaj",
+      },
+      lastEdited: new Date().toISOString(),
+      decision: "started",
+      phaseDecisions: {
+        scriptwriting: "approved",
+        voiceover: "approved",
+        fileOrganization: "approved",
+        videoEdit: "approved",
+        thumbnail: "approved",
+      },
+    },
+    {
+      id: "task4",
+      title: "Voiceover Recording for Promo",
+      description: "Record high-quality voiceovers for the promotional video.",
+      roleAssignments: {
+        scriptwriting: "Alice",
+        voiceover: "Dave",
+        fileOrganization: "Grace",
+        videoEdit: "Judy",
+        thumbnail: "Mallory",
+      },
+      lastEdited: new Date().toISOString(),
+      decision: "started",
+      phaseDecisions: {
+        scriptwriting: "revised",
+        voiceover: "denied",
+        fileOrganization: "",
+        videoEdit: "",
+        thumbnail: "",
+      },
+    },
+    {
+      id: "task5",
+      title: "Draft Script for Trailer",
+      description: "Initial draft of the trailer script, including key points.",
+      roleAssignments: {
+        scriptwriting: "Bob",
+        voiceover: "Eve",
+        fileOrganization: "Heidi",
+        videoEdit: "Karl",
+        thumbnail: "Olivia",
+      },
+      lastEdited: new Date().toISOString(),
+      decision: "draft",
+      phaseDecisions: {
+        scriptwriting: "",
+        voiceover: "",
+        fileOrganization: "",
+        videoEdit: "",
+        thumbnail: "",
+      },
+    },
+  ]);
+
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [newTask, setNewTask] = useState({ title: "", description: "" });
