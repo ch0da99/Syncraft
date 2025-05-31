@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NewTaskDraft, Task } from "./types/index";
-import { statuses, users } from "./data/statuses";
+import { Employee, employees, roles } from "./data/data";
 import { CreateModal } from "./components/CreateModal";
 import { EditModal } from "./components/EditModal";
 import { initialTasks } from "./data/initialTasks";
@@ -11,6 +11,7 @@ export default function App() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editTask, setEditTask] = useState<Task | null>(null);
+  const [selectedUserId, setSelectedUserId] = useState<string | "all">("all");
 
   const handleCreateTask = (newTask: NewTaskDraft) => {
     const createdTask: Task = {
@@ -21,7 +22,7 @@ export default function App() {
       roleAssignments: [],
       lastEdited: new Date().toISOString(),
       decision: "draft",
-      phaseDecisions: statuses.reduce(
+      phaseDecisions: roles.reduce(
         (acc, status) => ({ ...acc, [status.id]: "" }),
         {}
       ),
@@ -31,7 +32,6 @@ export default function App() {
   };
 
   const handleThumbnailChange = (id: string, newThumbnail: string) => {
-    console.log(newThumbnail);
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
         task.id === id ? { ...task, thumbnail: newThumbnail } : task
@@ -84,6 +84,19 @@ export default function App() {
     );
   };
 
+  const getFilteredTasks = (): Task[] => {
+    tasks.forEach((task) => console.log(task));
+    return selectedUserId === "all"
+      ? tasks
+      : tasks.filter(
+          (task) =>
+            Array.isArray(task.roleAssignments) &&
+            task.roleAssignments.some(
+              (assignment: any) => assignment.userId === selectedUserId
+            )
+        );
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <div className="flex justify-between items-center p-6 bg-gray-800 shadow">
@@ -95,20 +108,46 @@ export default function App() {
           + Add New Task
         </button>
       </div>
+
+      {/* User Filter Dropdown */}
+      <div className="p-4">
+        <label htmlFor="userFilter" className="mr-2 font-medium">
+          Filter by User:
+        </label>
+        <select
+          id="userFilter"
+          className="bg-gray-700 text-white px-3 py-1 rounded"
+          value={selectedUserId}
+          onChange={(e) => {
+            setSelectedUserId(e.target.value);
+            console.log(e.target.value);
+          }}
+        >
+          <option value="all">All Users</option>
+          {employees.map((user: Employee) => (
+            <option key={user.id} value={user.firstName}>
+              {user.firstName}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Task Board */}
       <TaskBoard
-        tasks={tasks}
-        statuses={statuses}
+        tasks={getFilteredTasks()}
+        roles={roles}
         onClickCard={(task) => {
           setEditTask(task);
           setShowEditModal(true);
         }}
       />
 
+      {/* Edit Modal */}
       {showEditModal && editTask && (
         <EditModal
           task={editTask}
-          statuses={statuses}
-          users={users}
+          jobs={jobs}
+          users={employees}
           setTask={setEditTask}
           onSave={handleSaveEditTask}
           onDelete={handleDeleteTask}
@@ -119,6 +158,7 @@ export default function App() {
         />
       )}
 
+      {/* Create Modal */}
       {showCreateModal && (
         <CreateModal
           onCreate={handleCreateTask}

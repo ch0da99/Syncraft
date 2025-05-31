@@ -1,3 +1,5 @@
+import { RoleAssignment } from "../data/jobs";
+
 export interface Status {
   id: string;
   label: string;
@@ -15,7 +17,7 @@ export interface Task {
   title: string;
   thumbnail: string;
   description: string;
-  roleAssignments: [];
+  roleAssignments: RoleAssignment[];
   lastEdited: string;
   decision: "approved" | "revised" | "denied" | "draft" | "started";
   phaseDecisions: Record<string, "approved" | "revised" | "denied" | "">;

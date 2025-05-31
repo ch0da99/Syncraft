@@ -54,7 +54,7 @@ interface Task {
   phaseDecisions: Record<string, "approved" | "revised" | "denied" | "">;
 }
 
-const statuses: Status[] = [
+const jobs: Status[] = [
   { id: "scriptwriting", label: "Scriptwriting" },
   { id: "voiceover", label: "Voiceover" },
   { id: "fileOrganization", label: "File Organization" },
@@ -192,7 +192,7 @@ export default function App() {
       roleAssignments: {},
       lastEdited: new Date().toISOString(),
       decision: "draft",
-      phaseDecisions: statuses.reduce(
+      phaseDecisions: jobs.reduce(
         (acc, status) => ({ ...acc, [status.id]: "" }),
         {}
       ),
@@ -272,7 +272,7 @@ export default function App() {
             </p>
             {task.decision === "started" ? (
               <div className="flex flex-wrap gap-2 mt-4 max-w-full">
-                {statuses.map((status) => (
+                {jobs.map((status) => (
                   <div key={status.id} className="relative">
                     <div
                       className={`w-10 h-10 rounded-full flex items-center justify-center text-xl ${getStatusColor(
@@ -320,7 +320,7 @@ export default function App() {
                 )
               }
             />
-            {statuses.map((status) => (
+            {jobs.map((status) => (
               <div key={status.id} className="mb-3">
                 <label className="block text-sm mb-1">
                   {status.label} Responsible:

@@ -1,11 +1,12 @@
 // components/EditModal.tsx
 import React, { useEffect } from "react";
 import { Task } from "../types/index";
+import { Employee, Role } from "../data/data";
 
 interface EditModalProps {
   task: Task;
-  statuses: { id: string; label: string }[];
-  users: Record<string, string[]>;
+  roles: Role[];
+  employees: Employee[];
   setTask: React.Dispatch<React.SetStateAction<Task | null>>;
   onSave: () => void;
   onDelete: (taskId: string) => void;
@@ -45,8 +46,8 @@ const decisionIcons: Record<string, string> = {
 
 export const EditModal: React.FC<EditModalProps> = ({
   task,
-  statuses,
-  users,
+  roles,
+  employees,
   setTask,
   onSave,
   onDelete,
@@ -80,14 +81,14 @@ export const EditModal: React.FC<EditModalProps> = ({
     setTask((prev) => {
       if (!prev) return prev;
       const updatedAssignments = { ...prev.roleAssignments };
-      statuses.forEach((status) => {
-        if (!updatedAssignments[status.id] && users[status.id]?.length === 1) {
-          updatedAssignments[status.id] = users[status.id][0];
+      roles.forEach((role: Role) => {
+        if (!updatedAssignments[role.id] && employees === 1) {
+          updatedAssignments[role.id] = employees[role.id][0];
         }
       });
       return { ...prev, roleAssignments: updatedAssignments };
     });
-  }, [statuses, users, setTask]);
+  }, [roles, employees, setTask]);
 
   return (
     <div className="fixed inset-0 backdrop-blur-sm flex justify-center items-center z-50">
@@ -133,14 +134,14 @@ export const EditModal: React.FC<EditModalProps> = ({
           onChange={(e) => setTask({ ...task, description: e.target.value })}
         />
 
-        {statuses.map((status, idx) => (
-          <div key={status.id} className="mb-3">
+        {roles.map((role, idx) => (
+          <div key={role.id} className="mb-3">
             <label className="block text-sm mb-1">
-              {status.label} Responsible:
+              {role.roleName} Responsible:
             </label>
             <select
               className="w-full p-2 rounded bg-gray-700 text-white"
-              value={task.roleAssignments[status.id] || ""}
+              value={task.roleAssignments?.[role.id] || ""}
               onChange={(e) =>
                 setTask((prev) =>
                   prev
@@ -148,7 +149,7 @@ export const EditModal: React.FC<EditModalProps> = ({
                         ...prev,
                         roleAssignments: {
                           ...prev.roleAssignments,
-                          [status.id]: e.target.value,
+                          [role.id]: e.target.value,
                         },
                       }
                     : prev
@@ -156,7 +157,7 @@ export const EditModal: React.FC<EditModalProps> = ({
               }
             >
               <option value="">Select...</option>
-              {users[status.id].map((user) => (
+              {users[role.id].map((user) => (
                 <option key={user} value={user}>
                   {user}
                 </option>
@@ -171,11 +172,11 @@ export const EditModal: React.FC<EditModalProps> = ({
                     <button
                       key={option}
                       className={`w-8 h-8 flex items-center justify-center rounded-full border text-white text-lg font-bold transition-colors duration-200 ${
-                        task.phaseDecisions[status.id] === option
+                        task.phaseDecisions[role.id] === option
                           ? getStatusColor(option)
                           : "bg-gray-600"
                       }`}
-                      onClick={() => updatePhaseDecision(status.id, option)}
+                      onClick={() => updatePhaseDecision(role.id, option)}
                       title={option}
                     >
                       {decisionIcons[option]}
@@ -185,7 +186,7 @@ export const EditModal: React.FC<EditModalProps> = ({
               </div>
             )}
 
-            {idx < statuses.length - 1 && (
+            {idx < roles.length - 1 && (
               <hr className="my-4 border-t-2 border-yellow-400" />
             )}
           </div>

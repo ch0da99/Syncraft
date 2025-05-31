@@ -1,7 +1,7 @@
 import React from "react";
 import { Task } from "../types/index";
 import { formatDate } from "../helpers/format";
-import { statuses } from "../data/statuses";
+import { Role, roles } from "../data/data";
 
 interface TaskCardProps {
   task: Task;
@@ -53,30 +53,30 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onClick }) => {
 
       {/* Assigned people initials */}
       <div className="flex flex-wrap gap-2 mt-4 max-w-full">
-        {Object.values(task.roleAssignments ?? "")
+        {(Array.isArray(task.roleAssignments) ? task.roleAssignments : [])
           .filter(Boolean)
-          .map((name, idx) => (
+          .map((assignment, idx) => (
             <div
               key={idx}
               className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold bg-gray-200 text-black border border-black"
-              title={name}
+              title={assignment.userId}
             >
-              {getInitials(name)}
+              {getInitials(assignment.userId)}
             </div>
           ))}
       </div>
 
       {task.decision === "started" ? (
         <div className="flex flex-wrap gap-2 mt-4 max-w-full">
-          {statuses.map((status) => (
-            <div key={status.id} className="relative">
+          {roles.map((role: Role) => (
+            <div key={role.id} className="relative">
               <div
                 className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold ${getStatusColor(
-                  task.phaseDecisions[status.id]
+                  task.phaseDecisions[role.id]
                 )}`}
-                title={status.label}
+                title={role.roleName}
               >
-                {status.id.charAt(0).toUpperCase()}
+                {role.roleName.charAt(0).toUpperCase()}
               </div>
             </div>
           ))}

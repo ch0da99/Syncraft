@@ -1,12 +1,12 @@
 // components/TaskBoard.tsx
 import React from "react";
-import { Task, Status } from "../types/index";
+import { Task } from "../types/index";
 import TaskCard from "./TaskCard";
-import { formatDate, getStatusColor } from "../helpers/format";
+import { Role } from "../data/data";
 
 interface TaskBoardProps {
   tasks: Task[];
-  statuses: Status[];
+  roles: Role[];
   onClickCard: (task: Task) => void;
 }
 
