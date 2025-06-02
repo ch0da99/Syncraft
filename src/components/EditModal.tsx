@@ -13,7 +13,7 @@ interface EditModalProps {
   onStartProject: () => void;
   onClose: () => void;
   updatePhaseDecision: (
-    phaseId: string,
+    phaseId: number,
     decision: "approved" | "revised" | "denied"
   ) => void;
   handleThumbnailChange: (id: string, newThumbnail: string) => void;
@@ -82,10 +82,11 @@ export const EditModal: React.FC<EditModalProps> = ({
       if (!prev) return prev;
       const updatedAssignments = { ...prev.roleAssignments };
       roles.forEach((role: Role) => {
-        if (!updatedAssignments[role.id] && employees === 1) {
-          updatedAssignments[role.id] = employees[role.id][0];
+        if (!updatedAssignments[role.id] && employees.length === 1) {
+          updatedAssignments[role.id] = employees.filter(e => e.roleId === role.id)[0];
         }
       });
+      console.log(updatedAssignments);
       return { ...prev, roleAssignments: updatedAssignments };
     });
   }, [roles, employees, setTask]);
@@ -157,9 +158,9 @@ export const EditModal: React.FC<EditModalProps> = ({
               }
             >
               <option value="">Select...</option>
-              {users[role.id].map((user) => (
-                <option key={user} value={user}>
-                  {user}
+              {employees.filter(e => e.roleId == role.id).map((user) => (
+                <option key={user.id} value={`${user.firstName} ${user.lastName}`}>
+                  {user.firstName}
                 </option>
               ))}
             </select>

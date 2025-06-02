@@ -71,7 +71,7 @@ export default function App() {
   };
 
   const updatePhaseDecisionInModal = (
-    phaseId: string,
+    phaseId: number,
     decision: "approved" | "revised" | "denied"
   ) => {
     setEditTask((prev) =>
@@ -85,7 +85,6 @@ export default function App() {
   };
 
   const getFilteredTasks = (): Task[] => {
-    tasks.forEach((task) => console.log(task));
     return selectedUserId === "all"
       ? tasks
       : tasks.filter(
@@ -120,7 +119,6 @@ export default function App() {
           value={selectedUserId}
           onChange={(e) => {
             setSelectedUserId(e.target.value);
-            console.log(e.target.value);
           }}
         >
           <option value="all">All Users</option>
@@ -146,8 +144,8 @@ export default function App() {
       {showEditModal && editTask && (
         <EditModal
           task={editTask}
-          jobs={jobs}
-          users={employees}
+          roles={roles}
+          employees={employees}
           setTask={setEditTask}
           onSave={handleSaveEditTask}
           onDelete={handleDeleteTask}
