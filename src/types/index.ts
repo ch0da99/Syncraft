@@ -1,16 +1,16 @@
-import { RoleAssignment } from "../data/jobs";
+import { RoleAssignment } from "../data/data";
 
 export interface Status {
   id: string;
   label: string;
 }
 
-export type RoleId =
-  | "scriptwriting"
-  | "voiceover"
-  | "fileOrganization"
-  | "videoEdit"
-  | "thumbnail";
+// export type RoleId =
+//   | "scriptwriting"
+//   | "voiceover"
+//   | "fileOrganization"
+//   | "videoEdit"
+//   | "thumbnail";
 
 export interface Task {
   id: string;

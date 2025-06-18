@@ -85,6 +85,16 @@ export default function App() {
   };
 
   const getFilteredTasks = (): Task[] => {
+    const stasks = selectedUserId === "all"
+      ? tasks
+      : tasks.filter(
+          (task) =>
+            Array.isArray(task.roleAssignments) &&
+            task.roleAssignments.some(
+              (assignment: any) => assignment.userId === selectedUserId
+            )
+        );
+        console.log(stasks);
     return selectedUserId === "all"
       ? tasks
       : tasks.filter(

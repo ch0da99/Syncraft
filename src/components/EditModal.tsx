@@ -80,13 +80,16 @@ export const EditModal: React.FC<EditModalProps> = ({
   useEffect(() => {
     setTask((prev) => {
       if (!prev) return prev;
-      const updatedAssignments = { ...prev.roleAssignments };
+      const updatedAssignments = [ ...prev.roleAssignments ];
       roles.forEach((role: Role) => {
         if (!updatedAssignments[role.id] && employees.length === 1) {
-          updatedAssignments[role.id] = employees.filter(e => e.roleId === role.id)[0];
+          updatedAssignments.map(a => {
+            if(a.roleId == role.id){
+              a = { roleId: role.id, userId: employees.filter(e => e.roleId === role.id)[0].id };
+            }
+          }) 
         }
       });
-      console.log(updatedAssignments);
       return { ...prev, roleAssignments: updatedAssignments };
     });
   }, [roles, employees, setTask]);
@@ -142,19 +145,23 @@ export const EditModal: React.FC<EditModalProps> = ({
             </label>
             <select
               className="w-full p-2 rounded bg-gray-700 text-white"
-              value={task.roleAssignments?.[role.id] || ""}
-              onChange={(e) =>
-                setTask((prev) =>
-                  prev
-                    ? {
-                        ...prev,
-                        roleAssignments: {
-                          ...prev.roleAssignments,
-                          [role.id]: e.target.value,
-                        },
-                      }
-                    : prev
-                )
+              value={task.roleAssignments.find(t => t.roleId === role.id)?.userId || ""}
+              onChange={(e) => {
+                const updatedAssignment = task.roleAssignments.filter(t => t.roleId === role.id);
+                console.log(task.roleAssignments)
+                console.log(updatedAssignment)
+                // setTask((prev) =>
+                //   prev
+                //     ? {
+                //         ...prev,
+                //         roleAssignments: [
+                //           ...prev.roleAssignments,
+                //           [role.id]: e.target.value,
+                //         ],
+                //       }
+                //     : prev
+                //   )
+                } 
               }
             >
               <option value="">Select...</option>

@@ -1,15 +1,17 @@
 import React from "react";
 import { Task } from "../types/index";
 import { formatDate } from "../helpers/format";
-import { Role, roles } from "../data/data";
+import { employees, Role, RoleAssignment, roles } from "../data/data";
 
 interface TaskCardProps {
   task: Task;
   onClick: (task: Task) => void;
 }
 
-const getInitials = (name: string) => {
-  return name
+const getInitials = (assignment: RoleAssignment) => {
+  const employee = employees.find(e => e.id === assignment.userId);
+  const fullName = employee!.firstName + employee!.lastName;
+  return fullName
     .split(" ")
     .map((part) => part[0]?.toUpperCase())
     .join("");
@@ -59,9 +61,9 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onClick }) => {
             <div
               key={idx}
               className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold bg-gray-200 text-black border border-black"
-              title={assignment.userId}
+              title={employees.filter(e => e.id === assignment.roleId)[0].firstName}
             >
-              {getInitials(assignment.userId)}
+              {getInitials(assignment)}
             </div>
           ))}
       </div>
