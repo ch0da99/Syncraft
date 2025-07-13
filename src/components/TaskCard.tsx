@@ -9,7 +9,7 @@ interface TaskCardProps {
 }
 
 const getInitials = (assignment: RoleAssignment) => {
-  const employee = employees.find(e => e.id === assignment.userId);
+  const employee = employees.find((e) => e.id === assignment.userId);
   const fullName = employee!.firstName + employee!.lastName;
   return fullName
     .split(" ")
@@ -61,7 +61,9 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onClick }) => {
             <div
               key={idx}
               className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold bg-gray-200 text-black border border-black"
-              title={employees.filter(e => e.id === assignment.roleId)[0].firstName}
+              title={
+                employees.filter((e) => e.id === assignment.userId)[0].firstName
+              }
             >
               {getInitials(assignment)}
             </div>

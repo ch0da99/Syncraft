@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NewTaskDraft, Task } from "./types/index";
-import { Employee, employees, roles } from "./data/data";
+import { Employee, employees, RoleAssignment, roles } from "./data/data";
 import { CreateModal } from "./components/CreateModal";
 import { EditModal } from "./components/EditModal";
 import { initialTasks } from "./data/initialTasks";
@@ -85,24 +85,13 @@ export default function App() {
   };
 
   const getFilteredTasks = (): Task[] => {
-    const stasks =
-      selectedUserId === "all"
-        ? tasks
-        : tasks.filter(
-            (task) =>
-              Array.isArray(task.roleAssignments) &&
-              task.roleAssignments.some(
-                (assignment: any) => assignment.userId === selectedUserId
-              )
-          );
-    console.log(stasks);
     return selectedUserId === "all"
       ? tasks
       : tasks.filter(
           (task) =>
             Array.isArray(task.roleAssignments) &&
             task.roleAssignments.some(
-              (assignment: any) => assignment.userId === selectedUserId
+              (assignment) => assignment.userId.toString() == selectedUserId
             )
         );
   };
@@ -134,7 +123,7 @@ export default function App() {
         >
           <option value="all">All Users</option>
           {employees.map((user: Employee) => (
-            <option key={user.id} value={user.firstName}>
+            <option key={user.id} value={user.id}>
               {user.firstName}
             </option>
           ))}
