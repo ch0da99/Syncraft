@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NewTaskDraft, Task } from "./types/index";
-import { Employee, employees, RoleAssignment, roles } from "./data/data";
+import { Employee, employees, roles } from "./data/data";
 import { CreateModal } from "./components/CreateModal";
 import { EditModal } from "./components/EditModal";
 import { initialTasks } from "./data/initialTasks";
