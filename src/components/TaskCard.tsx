@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Task } from "../types/index";
 import { formatDate } from "../helpers/format";
 import { employees, Role, RoleAssignment, roles } from "../data/data";
@@ -31,16 +31,19 @@ const getStatusColor = (status: string) => {
 };
 
 const TaskCard: React.FC<TaskCardProps> = ({ task, onClick }) => {
+  // THis is temp solution since storing thumbnail should be changed
+  const [imageError, setImageError] = useState(false);
   return (
     <div
       key={task.id}
       className="bg-gray-700 text-white rounded-lg p-4 shadow hover:shadow-lg transition cursor-pointer"
       onClick={() => onClick(task)}
     >
-      {task.thumbnail ? (
+      {task.thumbnail && !imageError ? (
         <img
           src={task.thumbnail}
           alt={`${task.title} thumbnail`}
+          onError={() => setImageError(true)}
           className="w-full h-40 object-cover rounded mb-2"
         />
       ) : (
